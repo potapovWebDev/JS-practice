@@ -148,6 +148,14 @@ window.addEventListener('DOMContentLoaded', () => {
     };
   }
 
+  function getZero(num) {
+    if (num >= 0 && num < 10) {
+      return `0${num}`;
+    } else {
+      return num;
+    }
+  }
+
   function setClock(selector, endtime) {
     const timer = document.querySelector(selector),
           days = timer.querySelector('#days'),
@@ -159,10 +167,10 @@ window.addEventListener('DOMContentLoaded', () => {
 
     function updateClock() {
       const t = getTimeRemaining(endtime);
-      days.innerHTML = t.days;
-      hours.innerHTML = t.hours;
-      minutes.innerHTML = t.minutes;
-      second.innerHTML = t.second;
+      days.innerHTML = getZero(t.days);
+      hours.innerHTML = getZero(t.hours);
+      minutes.innerHTML = getZero(t.minutes);
+      second.innerHTML = getZero(t.second);
 
       if (t.total <= 0) {
         clearInterval(timeInterval);
@@ -170,7 +178,19 @@ window.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  setClock('.timer', deadline);
+  setClock('.timer', deadline); //modal
+
+  const btnModal = document.querySelectorAll('[data-modal]'),
+        btnClose = document.querySelector('[data-close]'),
+        modal = document.querySelector('.modal');
+  btnModal.forEach(item => {
+    item.addEventListener('click', () => {
+      modal.style.display = 'block';
+    });
+  });
+  btnClose.addEventListener('click', () => {
+    modal.style.display = 'none';
+  });
 });
 
 /***/ })
