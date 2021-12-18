@@ -146,16 +146,22 @@ window.addEventListener('DOMContentLoaded', () => {
     
 
     class Menu {
-        constructor(imgSrc, title, descr, total, parentSelector) {
+        constructor(imgSrc, title, descr, total, parentSelector, ...classes) {
             this.imgSrc = imgSrc;
             this.title = title;
             this.descr = descr;
             this.total = total;
             this.parent = document.querySelector(parentSelector);
+            this.classes = classes;
         }
         addMenu() {
             const element = document.createElement(`div`);
-            element.classList = 'menu__item';
+            if (this.classes.length === 0) {
+                this.classes = 'menu__item'
+                element.classList.add(this.classes)
+            } else {
+                this.classes.forEach(className => element.classList.add(className))
+            }
             element.innerHTML = `<img src="${this.imgSrc}" alt="vegy">
             <h3 class="menu__item-subtitle">${this.title}"</h3>
             <div class="menu__item-descr">${this.descr}</div>
@@ -174,7 +180,8 @@ window.addEventListener('DOMContentLoaded', () => {
         'Меню "Фитнес',
         'Меню "Фитнес" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой и высоким качеством!',
         22,
-        '.menu__field .container'
+        '.menu__field .container',
+        'menu__item'
     ).addMenu();
     new Menu(
         'img/tabs/elite.jpg',
@@ -192,7 +199,3 @@ window.addEventListener('DOMContentLoaded', () => {
     ).addMenu();
     
 });
-
-
-
-
