@@ -257,7 +257,44 @@ window.addEventListener('DOMContentLoaded', () => {
 
   new Menu('img/tabs/vegy.jpg', 'Меню "Фитнес', 'Меню "Фитнес" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой и высоким качеством!', 22, '.menu__field .container', 'menu__item').addMenu();
   new Menu('img/tabs/elite.jpg', 'Меню “Премиум”', 'В меню “Премиум” мы используем не только красивый дизайн упаковки, но и качественное исполнение блюд. Красная рыба, морепродукты, фрукты - ресторанное меню без похода в ресторан!', 550, '.menu__field .container').addMenu();
-  new Menu('img/tabs/post.jpg', 'Меню "Постное"', 'Меню “Постное” - это тщательный подбор ингредиентов: полное отсутствие продуктов животного происхождения, молоко из миндаля, овса, кокоса или гречки, правильное количество белков за счет тофу и импортных вегетарианских стейков.', 320, '.menu__field .container').addMenu();
+  new Menu('img/tabs/post.jpg', 'Меню "Постное"', 'Меню “Постное” - это тщательный подбор ингредиентов: полное отсутствие продуктов животного происхождения, молоко из миндаля, овса, кокоса или гречки, правильное количество белков за счет тофу и импортных вегетарианских стейков.', 320, '.menu__field .container').addMenu(); //forms
+
+  const forms = document.querySelectorAll('form');
+  forms.forEach(item => {
+    postData(item);
+  });
+  const formMessage = {
+    loading: 'Загрузка',
+    succes: 'Выполнено',
+    error: 'Ошибка'
+  };
+
+  function postData(form) {
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      const statusMessage = document.createElement('div');
+      statusMessage.textContent = formMessage.loading;
+      form.append(statusMessage);
+      const request = new XMLHttpRequest();
+      request.open('POST', 'server.php');
+      /*             request.setRequestHeader('Content-type', 'multipart/form-data'); */
+
+      const formData = new FormData(form);
+      request.send(formData);
+      request.addEventListener('load', () => {
+        if (request.status === 200) {
+          console.log(request.response);
+          statusMessage.textContent = formMessage.succes;
+          setTimeout(() => {
+            statusMessage.remove();
+          }, 3000);
+        } else {
+          statusMessage.textContent = formMessage.error;
+        }
+      });
+      form.reset();
+    });
+  }
 });
 
 /***/ })

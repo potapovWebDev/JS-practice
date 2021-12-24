@@ -197,5 +197,46 @@ window.addEventListener('DOMContentLoaded', () => {
         320,
         '.menu__field .container'
     ).addMenu();
+
+    //forms
+    
+    const forms = document.querySelectorAll('form');
+
+    forms.forEach(item => {
+        postData(item);
+    })
+    const formMessage = {
+        loading: 'Загрузка',
+        succes: 'Выполнено',
+        error: 'Ошибка'
+    };
+
+    function postData(form) {
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const statusMessage = document.createElement('div');
+            statusMessage.textContent = formMessage.loading;
+            form.append(statusMessage);
+
+            const request = new XMLHttpRequest();
+            request.open('POST', 'server.php');
+/*             request.setRequestHeader('Content-type', 'multipart/form-data'); */
+            const formData = new FormData(form);
+            request.send(formData);
+            request.addEventListener('load', () => {
+                if (request.status === 200) {
+                    console.log(request.response)
+                    statusMessage.textContent = formMessage.succes;
+                    setTimeout(() => {
+                        statusMessage.remove();
+                    }, 3000);
+                } else {
+                    statusMessage.textContent = formMessage.error;
+                }
+            })
+            form.reset();
+        });
+    }
     
 });
