@@ -40,7 +40,7 @@ window.addEventListener('DOMContentLoaded', () => {
     
     // Timer
 
-    const deadline = '2021-12-31';
+    const deadline = '2022-12-31';
 
     function getTimeRemaining(endtime) {
         const t = Date.parse(endtime) - Date.parse(new Date()),
@@ -210,8 +210,125 @@ window.addEventListener('DOMContentLoaded', () => {
         success: 'Выполнено',
         error: 'Ошибка'
     };
+    // ------------------------------------------------    ОТПРАВКА ФОРМЫ НА СЕРВЕР С ПОМОЩЬЮ fetch в формате form Data
+/*     function postData(form) {
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
 
-    function postData(form) {
+            const statusMessage = document.createElement('img');
+            statusMessage.src = formMessage.loading;
+            statusMessage.style.cssText = `
+                display: block;
+                margin: 0 auto;
+            `;
+            form.insertAdjacentElement('afterend', statusMessage)
+
+            const formData = new FormData(form);
+            fetch('server.php', {
+                method: "POST",
+                body: formData
+            })
+            .then(data => data.text())
+            .then(data => {
+                console.log(data);
+                showThanksModal(formMessage.success);
+                statusMessage.remove();
+            })
+            .catch(() => {
+                showThanksModal(formMessage.error);
+            })
+            .finally(() => {
+                form.reset();
+            })
+        });
+        function showThanksModal(message) {
+            const prevModalDialog = document.querySelector('.modal__dialog');
+    
+            prevModalDialog.classList.add('hide');
+            openModal();
+    
+            const thanksModal = document.createElement('div');
+            thanksModal.classList.add('modal__dialog');
+            thanksModal.innerHTML = `
+                <div class="modal__content">
+                    <div class="modal__close" data-close>&times;</div>
+                    <div class="modal__title">${message}</div>
+                </div>
+            `;
+            document.querySelector('.modal').append(thanksModal);
+            setTimeout(() => {
+                thanksModal.remove();
+                prevModalDialog.classList.remove('hide');
+                closeModal();
+            }, 4000);
+        }
+    }  */
+
+// ------------------------------------------------    ОТПРАВКА ФОРМЫ НА СЕРВЕРМ С ПОМОЩЬЮ then в JSON формате
+
+function postData(form) {
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        const statusMessage = document.createElement('img');
+        statusMessage.src = formMessage.loading;
+        statusMessage.style.cssText = `
+            display: block;
+            margin: 0 auto;
+        `;
+        form.insertAdjacentElement('afterend', statusMessage)
+
+        const formData = new FormData(form);
+        const object = {};
+        formData.forEach(function(value, key) {
+            object[key] = value;
+        });
+
+        fetch('server.php', {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json"
+            },
+            body: JSON.stringify(object)
+        })
+        .then(data => data.text())
+        .then(data => {
+            console.log(data);
+            showThanksModal(formMessage.success);
+            statusMessage.remove();
+        })
+        .catch(() => {
+            showThanksModal(formMessage.error);
+        })
+        .finally(() => {
+            form.reset();
+        })
+    });
+    function showThanksModal(message) {
+        const prevModalDialog = document.querySelector('.modal__dialog');
+
+        prevModalDialog.classList.add('hide');
+        openModal();
+
+        const thanksModal = document.createElement('div');
+        thanksModal.classList.add('modal__dialog');
+        thanksModal.innerHTML = `
+            <div class="modal__content">
+                <div class="modal__close" data-close>&times;</div>
+                <div class="modal__title">${message}</div>
+            </div>
+        `;
+        document.querySelector('.modal').append(thanksModal);
+        setTimeout(() => {
+            thanksModal.remove();
+            prevModalDialog.classList.remove('hide');
+            closeModal();
+        }, 4000);
+    }
+} 
+
+// ------------------------------------------------    ОТПРАВКА ФОРМЫ НА СЕРВЕР С ПОМОЩЬЮ XMLHttpRequest
+/*     function postData(form) {
         form.addEventListener('submit', (e) => {
             e.preventDefault();
 
@@ -244,8 +361,7 @@ window.addEventListener('DOMContentLoaded', () => {
                 }
             });
         });
-    }
-    
+    } 
     function showThanksModal(message) {
         const prevModalDialog = document.querySelector('.modal__dialog');
 
@@ -267,4 +383,7 @@ window.addEventListener('DOMContentLoaded', () => {
             closeModal();
         }, 4000);
     }
+    */
+
+
 });
